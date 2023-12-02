@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\AlphaVantage;
 
 use App\AlphaVantage\Enums\Functions;
@@ -32,9 +34,6 @@ class Client
      */
     public static function factory(string $apiKey, string $apiUrl): self
     {
-        assert($apiKey !== '', 'API key must not be empty');
-        assert($apiUrl !== '', 'API URL must not be empty');
-
         return new self($apiKey, $apiUrl);
     }
 
@@ -71,6 +70,13 @@ class Client
         return $this->request(Functions::INTRADAY, [
             'symbol' => $symbol,
             'interval' => '1min'
+        ]);
+    }
+
+    public function daily(string $symbol): PromiseInterface|Response
+    {
+        return $this->request(Functions::DAILY, [
+            'symbol' => $symbol,
         ]);
     }
 }
