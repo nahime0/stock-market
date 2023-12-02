@@ -2,6 +2,7 @@
 
 namespace App\AlphaVantage;
 
+use App\AlphaVantage\Enums\Functions;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -38,12 +39,11 @@ class Client
     }
 
     /**
-     * @param  non-empty-string  $function
      * @param  array<string, string>  $options
      */
-    private function buildUrl(string $function, array $options = []): string
+    private function buildUrl(Functions $function, array $options = []): string
     {
-        $url = sprintf('%s?function=%s&apikey=%s', $this->apiUrl, $function, $this->apiKey);
+        $url = sprintf('%s?function=%s&apikey=%s', $this->apiUrl, $function->value, $this->apiKey);
         return array_reduce(
             array_keys($options),
             function (string $url, string $key) use ($options) {
@@ -54,10 +54,9 @@ class Client
     }
 
     /**
-     * @param  non-empty-string  $function
      * @param  array<string, string>  $options
      */
-    private function request(string $function, array $options = []): Response|PromiseInterface
+    private function request(Functions $function, array $options = []): Response|PromiseInterface
     {
         return Http::get(
             $this->buildUrl($function, $options)
@@ -66,11 +65,10 @@ class Client
 
     /**
      * @param  non-empty-string  $symbol
-     * @return PromiseInterface|Response
      */
     public function intraDay(string $symbol): PromiseInterface|Response
     {
-        return $this->request('TIME_SERIES_INTRADAY', [
+        return $this->request(Functions::INTRADAY, [
             'symbol' => $symbol,
             'interval' => '1min'
         ]);
