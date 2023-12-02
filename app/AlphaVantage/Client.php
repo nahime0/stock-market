@@ -5,27 +5,21 @@ declare(strict_types=1);
 namespace App\AlphaVantage;
 
 use App\AlphaVantage\Enums\Functions;
-use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Http\Client\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
-class Client
+final readonly class Client
 {
-    private string $apiKey;
-
-    private string $apiUrl;
-
     /**
      * @param  non-empty-string  $apiKey
      * @param  non-empty-string  $apiUrl
      */
-    public function __construct(string $apiKey, string $apiUrl)
-    {
+    public function __construct(
+        private string $apiKey,
+        private string $apiUrl
+    ) {
         assert($apiKey !== '', 'API key must not be empty');
         assert($apiUrl !== '', 'API URL must not be empty');
-
-        $this->apiKey = $apiKey;
-        $this->apiUrl = $apiUrl;
     }
 
     /**
@@ -38,9 +32,9 @@ class Client
     }
 
     /**
-     * @param  array<string, string>  $options
+     * @param  array{symbol: string, interval?: string}  $options
      */
-    private function buildUrl(Functions $function, array $options = []): string
+    private function buildUrl(Functions $function, array $options): string
     {
         $url = sprintf('%s?function=%s&apikey=%s', $this->apiUrl, $function->value, $this->apiKey);
         return array_reduce(
@@ -53,27 +47,52 @@ class Client
     }
 
     /**
-     * @param  array<string, string>  $options
+     * @param  array{symbol: string, interval?: string}  $options
+     * @return Collection<string, array{
+     *     "1. open": string,
+     *     "2. high": string,
+     *     "3. low": string,
+     *     "4. close": string,
+     *     "5. volume": string,
+     * }>
      */
-    private function request(Functions $function, array $options = []): Response|PromiseInterface
+    private function request(Functions $function, array $options): Collection
     {
-        return Http::get(
+        $response = Http::get(
             $this->buildUrl($function, $options)
         );
+
+        return $response->collect($function->jsonKey($options));
     }
 
     /**
      * @param  non-empty-string  $symbol
+     * @return Collection<string, array{
+     *     "1. open": string,
+     *     "2. high": string,
+     *     "3. low": string,
+     *     "4. close": string,
+     *     "5. volume": string,
+     * }>
      */
-    public function intraDay(string $symbol): PromiseInterface|Response
+    public function intraDay(string $symbol): Collection
     {
         return $this->request(Functions::INTRADAY, [
-            'symbol' => $symbol,
+            'symbol'   => $symbol,
             'interval' => '1min'
         ]);
     }
 
-    public function daily(string $symbol): PromiseInterface|Response
+    /**
+     * @return Collection<string, array{
+     *     "1. open": string,
+     *     "2. high": string,
+     *     "3. low": string,
+     *     "4. close": string,
+     *     "5. volume": string,
+     * }>
+     */
+    public function daily(string $symbol): Collection
     {
         return $this->request(Functions::DAILY, [
             'symbol' => $symbol,
