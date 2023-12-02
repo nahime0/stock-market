@@ -38,7 +38,7 @@ def api():
         volume = random.randint(1, 1000)
         price_max = max([price_open, price_close])
         price_min = min([price_open, price_close])
-        time_series[t_datetime.strftime("%Y-%m-%d %H:%M:%S")] = {
+        time_series[t_datetime.strftime("%Y-%m-%d %H:%M:00")] = {
             '1. open': "%.4f" % price_open,
             '2. high': "%.4f" % price_max,
             '3. low': "%.4f" % price_min,
@@ -51,7 +51,7 @@ def api():
         'Meta Data': {
             '1. Information': "Intraday (%smin) open, high, low, close prices and volume" % minutes,
             '2. Symbol': symbol,
-            '3. Last Refreshed': '2020-10-16 19:50:00',
+            '3. Last Refreshed': now.strftime("%Y-%m-%d %H:%M:00"),
             '4. Interval': "%smin" % minutes,
             '5. Output Size': 'Compact',
             '6. Time Zone': 'US/Eastern'
