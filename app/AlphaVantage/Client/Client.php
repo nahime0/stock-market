@@ -23,15 +23,6 @@ final readonly class Client
     }
 
     /**
-     * @param  non-empty-string  $apiKey
-     * @param  non-empty-string  $apiUrl
-     */
-    public static function factory(string $apiKey, string $apiUrl): self
-    {
-        return new self($apiKey, $apiUrl);
-    }
-
-    /**
      * @param  array{symbol: string, interval?: string}  $options
      */
     private function buildUrl(Functions $function, array $options): string
