@@ -6,7 +6,7 @@ use App\AlphaVantage\Enums\Functions;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Collection;
 
-beforeEach(function() {
+beforeEach(function () {
     $this->httpClient = Mockery::mock(Factory::class);
 
     $this->alphaVantageClient = new App\AlphaVantage\Client\Client(
@@ -29,8 +29,7 @@ test('that use the right architecture', function () {
             Collection::class,
             Factory::class,
             StockPrice::class
-        ])
-        ;
+        ]);
 });
 
 test('that process correcly the intraday', function () {
@@ -45,18 +44,16 @@ test('that process correcly the intraday', function () {
                 ->andReturn(
                     collect([
                         '2021-01-01 00:00:00' => [
-                            '1. open' => '100.1234',
-                            '2. high' => '101.1234',
-                            '3. low' => '100.1234',
-                            '4. close' => '101.1234',
+                            '1. open'   => '100.1234',
+                            '2. high'   => '101.1234',
+                            '3. low'    => '100.1234',
+                            '4. close'  => '101.1234',
                             '5. volume' => '200',
                         ],
                     ])
                 )
                 ->getMock()
-        )
-        ->getMock()
-    ;
+        );
 
     $data = $this->alphaVantageClient->intraDay('IBM');
 
@@ -67,7 +64,7 @@ test('that process correcly the intraday', function () {
     });
 });
 
-test('that process correctly the daily', function() {
+test('that process correctly the daily', function () {
     $this->httpClient->shouldReceive('get')
         ->once()
         ->with('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&apikey=demo&symbol=IBM')
@@ -79,18 +76,16 @@ test('that process correctly the daily', function() {
                 ->andReturn(
                     collect([
                         '2021-01-01' => [
-                            '1. open' => '100.1234',
-                            '2. high' => '101.1234',
-                            '3. low' => '100.1234',
-                            '4. close' => '101.1234',
+                            '1. open'   => '100.1234',
+                            '2. high'   => '101.1234',
+                            '3. low'    => '100.1234',
+                            '4. close'  => '101.1234',
                             '5. volume' => '200',
                         ],
                     ])
                 )
                 ->getMock()
-        )
-        ->getMock()
-    ;
+        );
 
     $data = $this->alphaVantageClient->daily('IBM');
 
