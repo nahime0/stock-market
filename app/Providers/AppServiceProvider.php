@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(
             Client::class,
-            function(Application $app) use ($apiKey, $apiUrl) {
+            function (Application $app) use ($apiKey, $apiUrl) {
                 return new Client(
                     $app->make(Factory::class),
                     $apiKey,

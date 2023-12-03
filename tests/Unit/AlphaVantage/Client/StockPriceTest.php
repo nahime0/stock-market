@@ -2,13 +2,13 @@
 
 use App\AlphaVantage\Client\StockPrice;
 
-beforeEach(function() {
-    $this->datatime = (new DateTime())->format("Y-m-d H:i:s");
-    $this->open = "100.1234";
-    $this->high = "101.1234";
-    $this->low = "100.1234";
-    $this->close = "101.1234";
-    $this->volume = "200";
+beforeEach(function () {
+    $this->datatime = (new DateTime())->format('Y-m-d H:i:s');
+    $this->open = '100.1234';
+    $this->high = '101.1234';
+    $this->low = '100.1234';
+    $this->close = '101.1234';
+    $this->volume = '200';
 
     $this->stockPrice = new StockPrice(
         $this->datatime,
@@ -21,7 +21,7 @@ beforeEach(function() {
 });
 
 // Architecture testing
-test('uses the right architecture', function() {
+test('uses the right architecture', function () {
     expect(StockPrice::class)
         ->toUseStrictTypes()
         ->toBeFinal()
@@ -29,8 +29,7 @@ test('uses the right architecture', function() {
         ->toUseNothing()
         ->toExtendNothing()
         ->toImplementNothing()
-        ->toHaveConstructor()
-    ;
+        ->toHaveConstructor();
 });
 
 test('datetime is untouched', function () {
@@ -56,4 +55,3 @@ test('close is converted to float', function () {
 test('volume is converted to int', function () {
     expect($this->stockPrice->volume())->toBe(200);
 });
-

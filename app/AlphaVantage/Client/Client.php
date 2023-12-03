@@ -30,6 +30,7 @@ final readonly class Client
     private function buildUrl(Functions $function, array $options): string
     {
         $url = sprintf('%s?function=%s&apikey=%s', $this->apiUrl, $function->value, $this->apiKey);
+
         return array_reduce(
             array_keys($options),
             function (string $url, string $key) use ($options) {
@@ -48,6 +49,7 @@ final readonly class Client
      *     "4. close": non-empty-string,
      *     "5. volume": non-empty-string,
      * }>
+     *
      * @throws RemoteApiNotAvailable
      */
     private function request(Functions $function, array $options): Collection
@@ -56,7 +58,7 @@ final readonly class Client
             $this->buildUrl($function, $options)
         );
 
-        if($response->ok()) {
+        if ($response->ok()) {
             return $response->collect($function->jsonKey($options));
         } else {
             throw new RemoteApiNotAvailable();
@@ -75,7 +77,7 @@ final readonly class Client
      */
     private function transformResponse(Collection $data): Collection
     {
-        return $data->map(function(array $data, string $datetime) {
+        return $data->map(function (array $data, string $datetime) {
             return new StockPrice(
                 $datetime,
                 $data['1. open'],
@@ -90,13 +92,14 @@ final readonly class Client
     /**
      * @param  non-empty-string  $symbol
      * @return Collection<int, StockPrice>
+     *
      * @throws RemoteApiNotAvailable
      */
     public function intraDay(string $symbol): Collection
     {
         $data = $this->request(Functions::INTRADAY, [
-            'symbol'   => $symbol,
-            'interval' => '1min'
+            'symbol' => $symbol,
+            'interval' => '1min',
         ]);
 
         return $this->transformResponse($data);
@@ -104,6 +107,7 @@ final readonly class Client
 
     /**
      * @return Collection<int, StockPrice>
+     *
      * @throws RemoteApiNotAvailable
      */
     public function daily(string $symbol): Collection

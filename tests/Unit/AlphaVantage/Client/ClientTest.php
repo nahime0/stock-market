@@ -31,7 +31,7 @@ test('uses the right architecture', function () {
             Collection::class,
             Factory::class,
             StockPrice::class,
-            RemoteApiNotAvailable::class
+            RemoteApiNotAvailable::class,
         ]);
 });
 
@@ -44,10 +44,10 @@ test('processes correcly the intraday', function () {
         ->andReturn(
             collect([
                 '2021-01-01 00:00:00' => [
-                    '1. open'   => '100.1234',
-                    '2. high'   => '101.1234',
-                    '3. low'    => '100.1234',
-                    '4. close'  => '101.1234',
+                    '1. open' => '100.1234',
+                    '2. high' => '101.1234',
+                    '3. low' => '100.1234',
+                    '4. close' => '101.1234',
                     '5. volume' => '200',
                 ],
             ])
@@ -76,10 +76,10 @@ test('processes correctly the daily', function () {
         ->andReturn(
             collect([
                 '2021-01-01' => [
-                    '1. open'   => '100.1234',
-                    '2. high'   => '101.1234',
-                    '3. low'    => '100.1234',
-                    '4. close'  => '101.1234',
+                    '1. open' => '100.1234',
+                    '2. high' => '101.1234',
+                    '3. low' => '100.1234',
+                    '4. close' => '101.1234',
                     '5. volume' => '200',
                 ],
             ])
@@ -109,7 +109,7 @@ test('processes correctly intraDay remote errors', function () {
 
     $this->httpClient->shouldNotHaveReceived('collect');
 
-    expect(fn() => $this->alphaVantageClient->intraDay('IBM'))->toThrow(RemoteApiNotAvailable::class);
+    expect(fn () => $this->alphaVantageClient->intraDay('IBM'))->toThrow(RemoteApiNotAvailable::class);
 });
 test('processes correctly daily remote errors', function () {
     $response = Mockery::mock(\Illuminate\Http\Client\Response::class);
@@ -121,5 +121,5 @@ test('processes correctly daily remote errors', function () {
 
     $this->httpClient->shouldNotHaveReceived('collect');
 
-    expect(fn() => $this->alphaVantageClient->daily('IBM'))->toThrow(RemoteApiNotAvailable::class);
+    expect(fn () => $this->alphaVantageClient->daily('IBM'))->toThrow(RemoteApiNotAvailable::class);
 });

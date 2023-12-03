@@ -12,10 +12,15 @@ namespace App\AlphaVantage\Client;
 final readonly class StockPrice
 {
     private string $datetime;
+
     private float $open;
+
     private float $high;
+
     private float $low;
+
     private float $close;
+
     private int $volume;
 
     /**
