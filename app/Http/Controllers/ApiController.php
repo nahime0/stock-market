@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PriceResource;
+use App\Http\Resources\SymbolResource;
 use App\Models\Symbol;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -14,6 +15,13 @@ use Illuminate\Routing\Controller as BaseController;
 class ApiController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    public function symbols(): JsonResponse
+    {
+        return response()->json(
+            SymbolResource::collection(Symbol::all())
+        );
+    }
 
     public function ticker(Symbol $symbol): JsonResponse
     {

@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/symbols', [
+    \App\Http\Controllers\ApiController::class,
+    'symbols',
+]);
+
 Route::get('/history/{symbol:symbol}', [
     App\Http\Controllers\ApiController::class,
     'history',
