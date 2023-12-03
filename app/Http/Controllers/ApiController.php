@@ -18,7 +18,7 @@ class ApiController extends BaseController
     public function ticker(Symbol $symbol): JsonResponse
     {
         $lastTwoPrices = $symbol->prices()->orderBy('datetime', 'DESC')->take(2)->get();
-        if($lastTwoPrices->count() < 2) {
+        if ($lastTwoPrices->count() < 2) {
             return response()->json([
                 'error' => 'Not enough data to calculate the ticker',
             ], 400);
@@ -27,6 +27,12 @@ class ApiController extends BaseController
         $currentPrice = $lastTwoPrices->first();
         $previousPrice = $lastTwoPrices->last();
 
+        if (empty($currentPrice) || empty($previousPrice)) {
+            return response()->json([
+                'error' => 'Not enough data to calculate the ticker',
+            ], 400);
+        }
+
         $ticker = [
             'current' => [
                 (new PriceResource($currentPrice)),
@@ -34,8 +40,8 @@ class ApiController extends BaseController
             'previous' => [
                 new PriceResource($previousPrice),
             ],
-            'change' => sprintf("%.4f", $currentPrice->close - $previousPrice->close),
-            'change_percent' => sprintf("%.4f", ($currentPrice->close - $previousPrice->close) / $previousPrice->close * 100),
+            'change' => sprintf('%.4f', $currentPrice->close - $previousPrice->close),
+            'change_percent' => sprintf('%.4f', ($currentPrice->close - $previousPrice->close) / $previousPrice->close * 100),
         ];
 
         return response()->json($ticker);
