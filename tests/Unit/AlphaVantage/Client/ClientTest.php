@@ -1,6 +1,7 @@
 <?php
 
 // Architecture testing
+use App\AlphaVantage\Client\Client;
 use App\AlphaVantage\Client\StockPrice;
 use App\AlphaVantage\Enums\Functions;
 use Illuminate\Http\Client\Factory;
@@ -17,7 +18,7 @@ beforeEach(function () {
 });
 
 test('that use the right architecture', function () {
-    expect(\App\AlphaVantage\Client\Client::class)
+    expect(Client::class)
         ->toUseStrictTypes()
         ->toBeFinal()
         ->toBeReadonly()
