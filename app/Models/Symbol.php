@@ -15,6 +15,14 @@ class Symbol extends Model
     /**
      * @return HasMany<Price>
      */
+    protected $fillable = [
+        'symbol',
+        'name',
+    ];
+
+    /**
+     * @return HasMany<Price>
+     */
     public function prices(): HasMany
     {
         return $this->hasMany(Price::class);

@@ -24,6 +24,20 @@ cp .env.example .env
 vim .env
 ```
 
+You need to specify credential for the `MySQL` connection and for the `Alpha Vantage` API.
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=stock_market
+DB_USERNAME=application
+DB_PASSWORD=application
+
+
+STOCK_MARKET_ALPHA_VANTAGE_API_KEY=demo
+STOCK_MARKET_ALPHA_VANTAGE_API_URL=https://www.alphavantage.co
+```
+
 Generate the application key:
 
 ```bash
@@ -42,11 +56,56 @@ TBD
 
 TBD
 
+# Usage
+
+Once you have the list of the Symbol defined in the database, 
+you can start fetching the stock pricing using the following command:
+
+```bash
+php artisan schedule:work
+```
+
+Each minute the pricing for all the symbols will be fetched and stored in the database.
+The intraDay (with 1min interval) will be used.
+
+If you want to manually fetch the pricing you can run:
+
+```bash
+php artisan app:fetch-pricing
+```
+
 # Testing
 
 ## Automated tests
 
-TBD
+The application is covered by unit and feature tests.
+The tests have been created using the [pest](https://pestphp.com/) framework, a wrapper around phpunit.
+To launch tests, just run:
+
+```bash
+./vendor/bin/pest
+```
+
+or use the composer shortcut:
+
+```bash
+composer test
+```
+
+## Static analysis
+
+The application is covered by static analysis using phpstan.
+To launch the static analysis, just run:
+
+```bash
+./vendor/bin/phpstan
+```
+
+or use the composer shortcut:
+
+```bash
+composer static
+```
 
 ## Test real world scenario
 
@@ -56,11 +115,17 @@ you can seed the database with fake data and use the provided mock server (see n
 To seed the database:
 
 ```bash
-php artisan db:seed
+php artisan db:seed Database\\Seeders\\SymbolSeeder
 ```
 
 This command will populate the `symbols` table with fake companies.
 You can then use those fake companies to fetch stock prices.
+
+If you want to seed also pricing data, you call the db:seed without arguments:
+
+```bash
+php artisan db:seed
+```
 
 ## Using the provided Alpha Vantage mock server
 
