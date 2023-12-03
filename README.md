@@ -43,6 +43,8 @@ TBD
 
 ## Automated tests
 
+TBD
+
 ## Test real world scenario
 
 To test the application in a real world scenario, without using the real Alpha Vantage API endpoint,
