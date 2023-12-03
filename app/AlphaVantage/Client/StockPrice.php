@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\AlphaVantage\Client;
 
+use DateTime;
+use Exception;
+
 /**
  * A representation of a stock price in a precise moment in time.
  * This class will take in input the strings returned by the API and
@@ -11,7 +14,7 @@ namespace App\AlphaVantage\Client;
  */
 final readonly class StockPrice
 {
-    private string $datetime;
+    private DateTime $datetime;
 
     private float $open;
 
@@ -30,6 +33,7 @@ final readonly class StockPrice
      * @param  non-empty-string  $low
      * @param  non-empty-string  $close
      * @param  non-empty-string  $volume
+     * @throws Exception
      */
     public function __construct(
         string $datetime,
@@ -46,7 +50,7 @@ final readonly class StockPrice
         assert($close !== '', 'Close must not be empty');
         assert($volume !== '', 'Volume must not be empty');
 
-        $this->datetime = $datetime;
+        $this->datetime = new DateTime($datetime);
         $this->open = (float) $open;
         $this->high = (float) $high;
         $this->low = (float) $low;
@@ -54,7 +58,7 @@ final readonly class StockPrice
         $this->volume = (int) $volume;
     }
 
-    public function datetime(): string
+    public function datetime(): DateTime
     {
         return $this->datetime;
     }

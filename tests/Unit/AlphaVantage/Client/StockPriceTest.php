@@ -3,7 +3,7 @@
 use App\AlphaVantage\Client\StockPrice;
 
 beforeEach(function () {
-    $this->datatime = (new DateTime())->format('Y-m-d H:i:s');
+    $this->datetime = (new DateTime())->format('Y-m-d H:i:s');
     $this->open = '100.1234';
     $this->high = '101.1234';
     $this->low = '100.1234';
@@ -11,7 +11,7 @@ beforeEach(function () {
     $this->volume = '200';
 
     $this->stockPrice = new StockPrice(
-        $this->datatime,
+        $this->datetime,
         $this->open,
         $this->high,
         $this->low,
@@ -32,8 +32,9 @@ test('uses the right architecture', function () {
         ->toHaveConstructor();
 });
 
-test('datetime is untouched', function () {
-    expect($this->stockPrice->datetime())->toBe($this->datatime);
+test('datetime is converted', function () {
+    expect($this->stockPrice->datetime())->toBeInstanceOf(DateTime::class)
+        ->and($this->stockPrice->datetime()->format('Y-m-d H:i:s'))->toBe($this->datetime);
 });
 
 test('open is converted to float', function () {
