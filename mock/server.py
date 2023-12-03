@@ -54,7 +54,7 @@ def time_series_intraday(symbol):
             '2. high': "%.4f" % price_max,
             '3. low': "%.4f" % price_min,
             '4. close': "%.4f" % price_close,
-            '5. volume': volume
+            '5. volume': "%d" % volume
         }
         price_open = price_close
 
@@ -87,7 +87,7 @@ def time_series_daily(symbol):
             '2. high': "%.4f" % price_max,
             '3. low': "%.4f" % price_min,
             '4. close': "%.4f" % price_close,
-            '5. volume': volume
+            '5. volume': "%d" % volume
         }
         price_open = price_close
 
