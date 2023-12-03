@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             SymbolSeeder::class,
-            PriceSeeder::class
+            PriceSeeder::class,
         ]);
     }
 }

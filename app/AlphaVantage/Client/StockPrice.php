@@ -33,6 +33,7 @@ final readonly class StockPrice
      * @param  non-empty-string  $low
      * @param  non-empty-string  $close
      * @param  non-empty-string  $volume
+     *
      * @throws Exception
      */
     public function __construct(

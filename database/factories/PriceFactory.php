@@ -18,7 +18,7 @@ class PriceFactory extends Factory
     public function definition(): array
     {
         return [
-            'datetime' => $this->faker->unique()->dateTimeBetween('-1 day' )->format('Y-m-d H:i:s'),
+            'datetime' => $this->faker->unique()->dateTimeBetween('-1 day')->format('Y-m-d H:i:s'),
             'open' => $this->faker->randomFloat(4, 0, 100),
             'high' => $this->faker->randomFloat(4, 0, 100),
             'low' => $this->faker->randomFloat(4, 0, 100),
