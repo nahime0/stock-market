@@ -6,7 +6,7 @@ parameters:
     paths:
         - app/
 
-    excludedPaths:
+    excludePaths:
         - app/tests
 
     level: 9
