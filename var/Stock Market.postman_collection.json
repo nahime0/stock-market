@@ -1,0 +1,98 @@
+{
+	"info": {
+		"_postman_id": "81f7b6ae-9bf8-4857-aaaa-466500253870",
+		"name": "Stock Market",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20779253"
+	},
+	"item": [
+		{
+			"name": "Symbols",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/symbols",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"symbols"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ticker",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/ticker/{{SYMBOL}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"ticker",
+						"{{SYMBOL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pricing History",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/history/{{SYMBOL}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"history",
+						"{{SYMBOL}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://stock-market.test",
+			"type": "string"
+		},
+		{
+			"key": "SYMBOL",
+			"value": "AAPL",
+			"type": "string"
+		}
+	]
+}
