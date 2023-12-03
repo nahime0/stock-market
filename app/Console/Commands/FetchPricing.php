@@ -31,9 +31,9 @@ class FetchPricing extends Command
     public function handle(): void
     {
         Symbol::all()->each(function (Symbol $symbol) {
-            if(!empty($symbol->symbol)) {
+            if (! empty($symbol->symbol)) {
                 try {
-                    AlphaVantage::intraDay($symbol->symbol)->each(function(StockPrice $price) use ($symbol) {
+                    AlphaVantage::intraDay($symbol->symbol)->each(function (StockPrice $price) use ($symbol) {
                         /**
                          * If we already have a price for a symbol and a datetime, update it.
                          * It nothing has changed the state will remain the same.
