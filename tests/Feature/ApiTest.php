@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Price;
 use App\Models\Symbol;
 use Illuminate\Testing\Fluent\AssertableJson;
 
@@ -51,6 +52,28 @@ it('returns the ticker', function () {
             'previous.volume' => 'string',
         ])
     );
+});
+
+it('will cache the ticker response', function () {
+    $symbol = Symbol::first();
+
+    $response1 = $this->get("/api/ticker/{$symbol->symbol}");
+    $response1->assertStatus(200);
+
+    Price::create([
+        'symbol_id' => $symbol->id,
+        'datetime' => (new DateTime())->modify('+1 day'),
+        'open' => 1,
+        'high' => 1,
+        'low' => 1,
+        'close' => 1,
+        'volume' => 1,
+    ]);
+
+    $response2 = $this->get("/api/ticker/{$symbol->symbol}");
+    $response2->assertStatus(200);
+
+    assert($response1->json('current.datetime') === $response2->json('current.datetime'));
 });
 
 it('returns the price history', function () {

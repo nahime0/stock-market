@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PriceResource;
 use App\Http\Resources\SymbolResource;
 use App\Models\Symbol;
+use Cache;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
@@ -25,7 +26,11 @@ class ApiController extends BaseController
 
     public function ticker(Symbol $symbol): JsonResponse
     {
-        $ticker = $symbol->ticker();
+        $ticker = Cache::remember(
+            "ticker.{$symbol->symbol}",
+            120,
+            fn () => $symbol->ticker()
+        );
 
         if (! $ticker) {
             return response()->json([
