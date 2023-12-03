@@ -38,6 +38,21 @@ STOCK_MARKET_ALPHA_VANTAGE_API_KEY=demo
 STOCK_MARKET_ALPHA_VANTAGE_API_URL=https://www.alphavantage.co
 ```
 
+The application leverages the Laravel `Cache` module.
+
+By default it's configured to use the `file` driver.
+If you want to use a different driver, you can change it in the `.env` file:
+
+For redis (the application already requires the needed predis/predis): 
+
+```dotenv
+CACHE_DRIVER=redis
+
+REDIS_HOST=
+REDIS_PASSWORD=
+REDIS_PORT=6379
+```
+
 Generate the application key:
 
 ```bash
@@ -56,7 +71,13 @@ Fill in the default Symbols:
 php artisan app:fill-symbols
 ````
 
-TBD
+At this time you can run the application using either
+a local web server (for example Laravel Valet or Laravel Herd)
+or using the built-in PHP web server:
+
+```bash
+php artisan serve
+```
 
 # Running with Docker
 
@@ -78,6 +99,77 @@ If you want to manually fetch the pricing you can run:
 
 ```bash
 php artisan app:fetch-pricing
+```
+
+At ths point you can start using the REST API.
+For simplicity, in the repository there is a `Postman` collection that you can use to test the API.
+You can find it in the `var` folder.
+
+Edit the variables of the collection to match your environment.
+
+There are three endpoints available:
+
+## GET /api/symbols
+
+This endpoint will return the list of `Symbols` available in the database.
+The response will be a JSON array with shape:
+```json
+[
+  {
+    "symbol": "AAPL",
+    "name": "Apple Inc."
+  }
+]
+```
+
+## GET /api/history/{symbol}
+
+This endpoint will return the pricing history for the given `Symbol`.
+The response will be a JSON array with shape:
+```json
+{
+  "data": [
+    {
+      "datetime": "2023-12-03 15:01:00",
+      "open": "0.0000",
+      "high": "0.0000",
+      "low": "0.0000",
+      "close": "0.0000",
+      "volume": "0"
+    }
+  ]
+}
+```
+
+## GET /api/ticker/{symbol}
+
+This endpoint will return the latest pricing for the given `Symbol`,
+and the price variation from the previous period.
+
+This API endpoints uses the Laravel `Cache` to avoid hitting the database every time.
+
+The response will be a JSON array with shape:
+```json
+{
+  "current": {
+    "datetime": "2023-12-03 15:01:00",
+    "open": "0.0000",
+    "high": "0.0000",
+    "low": "0.0000",
+    "close": "0.0000",
+    "volume": "0"
+  },
+  "previous": {
+    "datetime": "2023-12-03 15:00:00",
+    "open": "0.0000",
+    "high": "0.0000",
+    "low": "0.0000",
+    "close": "0.0000",
+    "volume": "0"
+  },
+  "change": "0.0000",
+  "change_percent": "0.0000"
+}
 ```
 
 # Testing
@@ -173,6 +265,8 @@ The code has been written to be statically typed, using the `PHPStan` tool.
 The architecture of each file is tested during the Unit testing.
 
 strict_types has been used to enforce strict typing among the application.
+
+It leverage the Laravel `Cache` to avoid hitting the database every time the `/api/ticker/{symbol}` endpoint is called.
 
 ### Classes
 
