@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('symbols', function (Blueprint $table) {
             $table->id();
-            $table->string('symbol', 5)->unique();
+            $table->string('symbol', 5)->unique()->index();
             $table->string('name', 255);
             $table->timestamps();
         });
