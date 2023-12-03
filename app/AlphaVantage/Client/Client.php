@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\AlphaVantage\Client;
 
 use App\AlphaVantage\Enums\Functions;
+use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Http;
 
 final readonly class Client
 {
@@ -15,6 +15,7 @@ final readonly class Client
      * @param  non-empty-string  $apiUrl
      */
     public function __construct(
+        private Factory $http,
         private string $apiKey,
         private string $apiUrl
     ) {
@@ -49,7 +50,7 @@ final readonly class Client
      */
     private function request(Functions $function, array $options): Collection
     {
-        $response = Http::get(
+        $response = $this->http->get(
             $this->buildUrl($function, $options)
         );
 

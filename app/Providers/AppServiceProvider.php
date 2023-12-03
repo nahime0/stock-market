@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\AlphaVantage\Client\Client;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Client\Factory;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,7 +42,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(
             Client::class,
             function(Application $app) use ($apiKey, $apiUrl) {
-                return new Client($apiKey, $apiUrl);
+                return new Client(
+                    $app->make(Factory::class),
+                    $apiKey,
+                    $apiUrl
+                );
             }
         );
     }
