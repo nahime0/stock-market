@@ -27,6 +27,7 @@ class Price extends Model
         'high',
         'low',
         'close',
+        'volume',
     ];
 
     /**

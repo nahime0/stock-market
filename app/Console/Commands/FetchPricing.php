@@ -48,6 +48,7 @@ class FetchPricing extends Command
                             'high' => $price->high(),
                             'low' => $price->low(),
                             'close' => $price->close(),
+                            'volume' => $price->volume(),
                         ]);
                     });
 
