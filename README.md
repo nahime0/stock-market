@@ -3,6 +3,8 @@
 This application will periodically fetch stock prices from the [Alpha Vantage API](https://www.alphavantage.co/) and store them in a database. 
 The data can be accessed through a REST API.
 
+This is just a PoC, should not be used in production.
+
 # Installation
 
 After cloning the repository, you need to install the dependencies using composer
