@@ -39,12 +39,12 @@ final readonly class Client
 
     /**
      * @param  array{symbol: string, interval?: string}  $options
-     * @return Collection<string, array{
-     *     "1. open": string,
-     *     "2. high": string,
-     *     "3. low": string,
-     *     "4. close": string,
-     *     "5. volume": string,
+     * @return Collection<non-empty-string, array{
+     *     "1. open": non-empty-string,
+     *     "2. high": non-empty-string,
+     *     "3. low": non-empty-string,
+     *     "4. close": non-empty-string,
+     *     "5. volume": non-empty-string,
      * }>
      */
     private function request(Functions $function, array $options): Collection
@@ -57,36 +57,52 @@ final readonly class Client
     }
 
     /**
-     * @param  non-empty-string  $symbol
-     * @return Collection<string, array{
-     *     "1. open": string,
-     *     "2. high": string,
-     *     "3. low": string,
-     *     "4. close": string,
-     *     "5. volume": string,
-     * }>
+     * @param Collection<non-empty-string, array{
+     *     "1. open": non-empty-string,
+     *     "2. high": non-empty-string,
+     *     "3. low": non-empty-string,
+     *     "4. close": non-empty-string,
+     *     "5. volume": non-empty-string,
+     * }> $data
+     * @return Collection<int, StockPrice>
      */
-    public function intraDay(string $symbol): Collection
+    private function transformResponse(Collection $data): Collection
     {
-        return $this->request(Functions::INTRADAY, [
-            'symbol'   => $symbol,
-            'interval' => '1min'
-        ]);
+        return $data->map(function(array $data, string $datetime) {
+            return new StockPrice(
+                $datetime,
+                $data['1. open'],
+                $data['2. high'],
+                $data['3. low'],
+                $data['4. close'],
+                $data['5. volume'],
+            );
+        })->values();
     }
 
     /**
-     * @return Collection<string, array{
-     *     "1. open": string,
-     *     "2. high": string,
-     *     "3. low": string,
-     *     "4. close": string,
-     *     "5. volume": string,
-     * }>
+     * @param  non-empty-string  $symbol
+     * @return Collection<int, StockPrice>
+     */
+    public function intraDay(string $symbol): Collection
+    {
+        $data = $this->request(Functions::INTRADAY, [
+            'symbol'   => $symbol,
+            'interval' => '1min'
+        ]);
+
+        return $this->transformResponse($data);
+    }
+
+    /**
+     * @return Collection<int, StockPrice>
      */
     public function daily(string $symbol): Collection
     {
-        return $this->request(Functions::DAILY, [
+        $data = $this->request(Functions::DAILY, [
             'symbol' => $symbol,
         ]);
+
+        return $this->transformResponse($data);
     }
 }
