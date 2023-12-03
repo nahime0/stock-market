@@ -7,9 +7,6 @@ jobs:
     name: Run tests
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dependency-version: [prefer-lowest, prefer-stable]
 
     steps:
       - name: Checkout
@@ -24,7 +21,7 @@ jobs:
           extensions: zip, curl, pecl_http
 
       - name: Install PHP dependencies
-        run: composer update --${{ matrix.dependency-version }} --no-interaction --no-progress --ansi
+        run: composer update --prefer-stable --no-interaction --no-progress --ansi
 
       - name: Prepare the Application
         run: |

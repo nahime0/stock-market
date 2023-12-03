@@ -7,9 +7,6 @@ jobs:
     name: Run static analysis
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dependency-version: [prefer-lowest, prefer-stable]
 
     steps:
       - name: Checkout
