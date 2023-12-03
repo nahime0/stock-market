@@ -20,6 +20,15 @@ class Price extends Model
         'close' => 'float',
     ];
 
+    protected $fillable = [
+        'symbol_id',
+        'datetime',
+        'open',
+        'high',
+        'low',
+        'close',
+    ];
+
     /**
      * @return BelongsTo<Symbol, Price>
      */
