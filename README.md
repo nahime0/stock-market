@@ -1,5 +1,8 @@
 # Stock market
 
+![Static analysis](https://github.com/nahime0/stock-market/actions/workflows/static.yml/badge.svg)
+![Automated testing](https://github.com/nahime0/stock-market/actions/workflows/tests.yml/badge.svg)
+
 This application will periodically fetch stock prices from the [Alpha Vantage API](https://www.alphavantage.co/) and store them in a database. 
 The data can be accessed through a REST API.
 
