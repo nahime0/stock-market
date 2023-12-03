@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\AlphaVantage;
+namespace App\AlphaVantage\Client;
 
 use App\AlphaVantage\Enums\Functions;
 use Illuminate\Support\Collection;

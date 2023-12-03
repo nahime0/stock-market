@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\AlphaVantage\Client;
+use App\AlphaVantage\Client\Client;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
