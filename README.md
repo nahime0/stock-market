@@ -50,6 +50,12 @@ Run the migrations:
 php artisan migrate
 ```
 
+Fill in the default Symbols: 
+
+```bash
+php artisan app:fill-symbols
+````
+
 TBD
 
 # Running with Docker
@@ -109,23 +115,8 @@ composer static
 
 ## Test real world scenario
 
-To test the application in a real world scenario, without using the real Alpha Vantage API endpoint,
-you can seed the database with fake data and use the provided mock server (see next chapter).
-
-To seed the database:
-
-```bash
-php artisan db:seed Database\\Seeders\\SymbolSeeder
-```
-
-This command will populate the `symbols` table with fake companies.
-You can then use those fake companies to fetch stock prices.
-
-If you want to seed also pricing data, you call the db:seed without arguments:
-
-```bash
-php artisan db:seed
-```
+You can test the application, also without the real Alpha Vantage API key.
+Just use the provided mock server.
 
 ## Using the provided Alpha Vantage mock server
 
@@ -152,3 +143,84 @@ STOCK_MARKET_ALPHA_VANTAGE_API_URL=http://127.0.0.1:5000
 ```
 
 The Api Key can be anything, it will not be checked by the mock server.
+
+## Testing just the application with fake data
+
+If you're just interested in testing the application, without fetching any data from the API,
+you can fill the database with fake pricing using the following command:
+
+```bash
+php artisan db:seed Database\\Seeders\\PriceSeeder
+```
+
+The previous command will fill the pricing for all the `Symbols` in the database.
+This works only if you already have the `Symbols` data in the database (see the installation section).
+
+If you want to use also fake `Symbols` data, you can run:
+
+```bash
+php artisan db:seed Database\\Seeders\\SymbolSeeder
+```
+
+# Information about the project
+
+## Architecture
+
+The application is built using the `Laravel framework`.
+The main logic for the Alpha Vantage API is located in the `app/AlphaVantage` folder.
+
+### Classes
+
+#### App\AlphaVantage\Client\Client
+
+This is the main class that interacts with the Alpha Vantage API.
+It will handle communication with the API and data transformation.
+Results for every call will be a Laravel Collection of StockPrice objects.
+
+Dependency injection for the class is handle in the `app\Providers\AppServiceProvider.php` file.
+
+#### App\AlphaVantage\Client\StockPrice
+
+This is the representation of a single Stock Price. It is valid either for 
+the intraDay and daily pricing. 
+It contains data fetched from the API, transormed in the right data type.
+
+#### App\AlphaVantage\Enums\Functions
+
+This Enum contains the functions of the Alpha Vantage API supported by the
+application.
+The method `jsonKey()` provides a convenient way of establishing the key of the
+json response that will be used to fetch the data.
+
+#### App\AlphaVantage\AlphaVantage
+
+This is a Laravel Facade, with root accessors to the Alpha Vantage Client.
+This is used to easily access the Alpha Vantage Client from the application.
+
+### Configuration
+
+The configuration for the application is stored in the `config/stock_market.php` file.
+Each configuration key will be available in the application using the `config()` helper, 
+and can be set-up using environment variables.
+
+### Commands
+
+#### App\Console\Commands\FillSymbols
+
+This command will fill the database with the default symbols.
+Usage:
+
+```bash
+php artisan app:fill-symbols
+```
+
+#### App\Console\Commands\FetchPricing
+
+This command will fetch the pricing for all the symbols in the database.
+Usage:
+
+```bash
+php artisan app:fetch-pricing
+```
+
+This command is scheduled (in the `app/Console/Kernel.php` file) to run every minute.
