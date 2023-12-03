@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\AlphaVantage\Client;
 
 use App\AlphaVantage\Enums\Functions;
+use App\Exceptions\RemoteApiNotAvailable;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Collection;
 
@@ -47,7 +48,7 @@ final readonly class Client
      *     "4. close": non-empty-string,
      *     "5. volume": non-empty-string,
      * }>
-     * @throws \Exception
+     * @throws RemoteApiNotAvailable
      */
     private function request(Functions $function, array $options): Collection
     {
@@ -58,7 +59,7 @@ final readonly class Client
         if($response->ok()) {
             return $response->collect($function->jsonKey($options));
         } else {
-            throw new \Exception('Error');
+            throw new RemoteApiNotAvailable();
         }
     }
 
@@ -89,6 +90,7 @@ final readonly class Client
     /**
      * @param  non-empty-string  $symbol
      * @return Collection<int, StockPrice>
+     * @throws RemoteApiNotAvailable
      */
     public function intraDay(string $symbol): Collection
     {
@@ -102,6 +104,7 @@ final readonly class Client
 
     /**
      * @return Collection<int, StockPrice>
+     * @throws RemoteApiNotAvailable
      */
     public function daily(string $symbol): Collection
     {

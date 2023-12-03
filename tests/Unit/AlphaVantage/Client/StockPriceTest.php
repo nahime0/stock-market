@@ -21,7 +21,7 @@ beforeEach(function() {
 });
 
 // Architecture testing
-test('that use the right architecture', function() {
+test('uses the right architecture', function() {
     expect(StockPrice::class)
         ->toUseStrictTypes()
         ->toBeFinal()
@@ -33,27 +33,27 @@ test('that use the right architecture', function() {
     ;
 });
 
-test('that datetime is untouched', function () {
+test('datetime is untouched', function () {
     expect($this->stockPrice->datetime())->toBe($this->datatime);
 });
 
-test('that open is converted to float', function () {
+test('open is converted to float', function () {
     expect($this->stockPrice->open())->toBe(100.1234);
 });
 
-test('that high is converted to float', function () {
+test('high is converted to float', function () {
     expect($this->stockPrice->high())->toBe(101.1234);
 });
 
-test('that low is converted to float', function () {
+test('low is converted to float', function () {
     expect($this->stockPrice->low())->toBe(100.1234);
 });
 
-test('that close is converted to float', function () {
+test('close is converted to float', function () {
     expect($this->stockPrice->close())->toBe(101.1234);
 });
 
-test('that volume is converted to int', function () {
+test('volume is converted to int', function () {
     expect($this->stockPrice->volume())->toBe(200);
 });
 

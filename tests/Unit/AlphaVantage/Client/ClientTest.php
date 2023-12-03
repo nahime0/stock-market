@@ -4,6 +4,7 @@
 use App\AlphaVantage\Client\Client;
 use App\AlphaVantage\Client\StockPrice;
 use App\AlphaVantage\Enums\Functions;
+use App\Exceptions\RemoteApiNotAvailable;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Collection;
 
@@ -17,7 +18,7 @@ beforeEach(function () {
     );
 });
 
-test('that use the right architecture', function () {
+test('uses the right architecture', function () {
     expect(Client::class)
         ->toUseStrictTypes()
         ->toBeFinal()
@@ -29,11 +30,12 @@ test('that use the right architecture', function () {
             Functions::class,
             Collection::class,
             Factory::class,
-            StockPrice::class
+            StockPrice::class,
+            RemoteApiNotAvailable::class
         ]);
 });
 
-test('that process correcly the intraday', function () {
+test('processes correcly the intraday', function () {
     $response = Mockery::mock(\Illuminate\Http\Client\Response::class);
     $response->shouldReceive('ok')->once()->andReturn(true);
     $response->shouldReceive('collect')
@@ -65,7 +67,7 @@ test('that process correcly the intraday', function () {
     });
 });
 
-test('that process correctly the daily', function () {
+test('processes correctly the daily', function () {
     $response = Mockery::mock(\Illuminate\Http\Client\Response::class);
     $response->shouldReceive('ok')->once()->andReturn(true);
     $response->shouldReceive('collect')
@@ -95,4 +97,29 @@ test('that process correctly the daily', function () {
     $data->each(function ($stockPrice) {
         expect($stockPrice)->toBeInstanceOf(StockPrice::class);
     });
+});
+
+test('processes correctly intraDay remote errors', function () {
+    $response = Mockery::mock(\Illuminate\Http\Client\Response::class);
+    $response->shouldReceive('ok')->once()->andReturn(false);
+
+    $this->httpClient->shouldReceive('get')
+        ->once()
+        ->andReturn($response);
+
+    $this->httpClient->shouldNotHaveReceived('collect');
+
+    expect(fn() => $this->alphaVantageClient->intraDay('IBM'))->toThrow(RemoteApiNotAvailable::class);
+});
+test('processes correctly daily remote errors', function () {
+    $response = Mockery::mock(\Illuminate\Http\Client\Response::class);
+    $response->shouldReceive('ok')->once()->andReturn(false);
+
+    $this->httpClient->shouldReceive('get')
+        ->once()
+        ->andReturn($response);
+
+    $this->httpClient->shouldNotHaveReceived('collect');
+
+    expect(fn() => $this->alphaVantageClient->daily('IBM'))->toThrow(RemoteApiNotAvailable::class);
 });
