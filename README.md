@@ -169,6 +169,11 @@ php artisan db:seed Database\\Seeders\\SymbolSeeder
 The application is built using the `Laravel framework`.
 The main logic for the Alpha Vantage API is located in the `app/AlphaVantage` folder.
 
+The code has been written to be statically typed, using the `PHPStan` tool.
+The architecture of each file is tested during the Unit testing.
+
+strict_types has been used to enforce strict typing among the application.
+
 ### Classes
 
 #### App\AlphaVantage\Client\Client

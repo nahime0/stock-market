@@ -13,7 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/pricing/{symbol:symbol}', [
+Route::get('/history/{symbol:symbol}', [
     App\Http\Controllers\ApiController::class,
-    'pricing',
+    'history',
+]);
+
+Route::get('/ticker/{symbol:symbol}', [
+    App\Http\Controllers\ApiController::class,
+    'ticker',
 ]);

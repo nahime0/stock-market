@@ -20,11 +20,11 @@ class PriceResource extends JsonResource
     {
         return [
             'datetime' => $this->datetime->format('Y-m-d H:i:s'),
-            'open' => $this->open,
-            'high' => $this->high,
-            'low' => $this->low,
-            'close' => $this->close,
-            'volume' => $this->volume,
+            'open' => sprintf("%.4f", $this->open),
+            'high' => sprintf("%.4f", $this->high),
+            'low' => sprintf("%.4f", $this->low),
+            'close' => sprintf("%.4f", $this->close),
+            'volume' => (string)$this->volume,
         ];
     }
 }

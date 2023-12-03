@@ -15,7 +15,34 @@ class ApiController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function pricing(Symbol $symbol): JsonResponse
+    public function ticker(Symbol $symbol): JsonResponse
+    {
+        $lastTwoPrices = $symbol->prices()->orderBy('datetime', 'DESC')->take(2)->get();
+        if($lastTwoPrices->count() < 2) {
+            return response()->json([
+                'error' => 'Not enough data to calculate the ticker',
+            ], 400);
+        }
+
+        $currentPrice = $lastTwoPrices->first();
+        $previousPrice = $lastTwoPrices->last();
+
+        $ticker = [
+            'current' => [
+                (new PriceResource($currentPrice)),
+            ],
+            'previous' => [
+                new PriceResource($previousPrice),
+            ],
+            'change' => sprintf("%.4f", $currentPrice->close - $previousPrice->close),
+            'change_percent' => sprintf("%.4f", ($currentPrice->close - $previousPrice->close) / $previousPrice->close * 100),
+        ];
+
+        return response()->json($ticker);
+
+    }
+
+    public function history(Symbol $symbol): JsonResponse
     {
 
         $data = $symbol->prices()->orderBy('datetime', 'DESC')->paginate(10);
