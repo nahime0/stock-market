@@ -23,13 +23,13 @@ jobs:
           coverage: none
           extensions: zip, curl, pecl_http
 
-      - name: Setup Problem Matches
-        run: |
-          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-
       - name: Install PHP dependencies
         run: composer update --${{ matrix.dependency-version }} --no-interaction --no-progress --ansi
+
+      - name: Prepare the Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
 
       - name: Unit Tests
         run: composer test
