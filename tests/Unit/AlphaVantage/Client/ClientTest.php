@@ -34,27 +34,27 @@ test('that use the right architecture', function () {
 });
 
 test('that process correcly the intraday', function () {
+    $response = Mockery::mock(\Illuminate\Http\Client\Response::class);
+    $response->shouldReceive('ok')->once()->andReturn(true);
+    $response->shouldReceive('collect')
+        ->once()
+        ->with('Time Series (1min)')
+        ->andReturn(
+            collect([
+                '2021-01-01 00:00:00' => [
+                    '1. open'   => '100.1234',
+                    '2. high'   => '101.1234',
+                    '3. low'    => '100.1234',
+                    '4. close'  => '101.1234',
+                    '5. volume' => '200',
+                ],
+            ])
+        );
+
     $this->httpClient->shouldReceive('get')
         ->once()
         ->with('https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&apikey=demo&symbol=IBM&interval=1min')
-        ->andReturn(
-            Mockery::mock(\Illuminate\Http\Client\Response::class)
-                ->shouldReceive('collect')
-                ->once()
-                ->with('Time Series (1min)')
-                ->andReturn(
-                    collect([
-                        '2021-01-01 00:00:00' => [
-                            '1. open'   => '100.1234',
-                            '2. high'   => '101.1234',
-                            '3. low'    => '100.1234',
-                            '4. close'  => '101.1234',
-                            '5. volume' => '200',
-                        ],
-                    ])
-                )
-                ->getMock()
-        );
+        ->andReturn($response);
 
     $data = $this->alphaVantageClient->intraDay('IBM');
 
@@ -66,27 +66,27 @@ test('that process correcly the intraday', function () {
 });
 
 test('that process correctly the daily', function () {
+    $response = Mockery::mock(\Illuminate\Http\Client\Response::class);
+    $response->shouldReceive('ok')->once()->andReturn(true);
+    $response->shouldReceive('collect')
+        ->once()
+        ->with('Time Series (Daily)')
+        ->andReturn(
+            collect([
+                '2021-01-01' => [
+                    '1. open'   => '100.1234',
+                    '2. high'   => '101.1234',
+                    '3. low'    => '100.1234',
+                    '4. close'  => '101.1234',
+                    '5. volume' => '200',
+                ],
+            ])
+        );
+
     $this->httpClient->shouldReceive('get')
         ->once()
         ->with('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&apikey=demo&symbol=IBM')
-        ->andReturn(
-            Mockery::mock(\Illuminate\Http\Client\Response::class)
-                ->shouldReceive('collect')
-                ->once()
-                ->with('Time Series (Daily)')
-                ->andReturn(
-                    collect([
-                        '2021-01-01' => [
-                            '1. open'   => '100.1234',
-                            '2. high'   => '101.1234',
-                            '3. low'    => '100.1234',
-                            '4. close'  => '101.1234',
-                            '5. volume' => '200',
-                        ],
-                    ])
-                )
-                ->getMock()
-        );
+        ->andReturn($response);
 
     $data = $this->alphaVantageClient->daily('IBM');
 

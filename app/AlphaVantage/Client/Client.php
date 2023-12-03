@@ -47,6 +47,7 @@ final readonly class Client
      *     "4. close": non-empty-string,
      *     "5. volume": non-empty-string,
      * }>
+     * @throws \Exception
      */
     private function request(Functions $function, array $options): Collection
     {
@@ -54,7 +55,11 @@ final readonly class Client
             $this->buildUrl($function, $options)
         );
 
-        return $response->collect($function->jsonKey($options));
+        if($response->ok()) {
+            return $response->collect($function->jsonKey($options));
+        } else {
+            throw new \Exception('Error');
+        }
     }
 
     /**
