@@ -40,7 +40,13 @@ STOCK_MARKET_ALPHA_VANTAGE_API_URL=https://www.alphavantage.co
 
 The application leverages the Laravel `Cache` module.
 
-By default it's configured to use the `file` driver.
+The ttl of the cached data can be set-up using the provided environment variable:
+
+```dotenv
+STOCK_MARKET_CACHE_TTL=60
+```
+
+By default the cache it's configured to use the `file` driver.
 If you want to use a different driver, you can change it in the `.env` file:
 
 For redis (the application already requires the needed predis/predis): 

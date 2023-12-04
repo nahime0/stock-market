@@ -26,9 +26,13 @@ class ApiController extends BaseController
 
     public function ticker(Symbol $symbol): JsonResponse
     {
+        $ttl = config('stock_market.cache_ttl', 60);
+
+        assert(is_int($ttl) && $ttl > 0, 'Cache TTL must be a positive integer.');
+
         $ticker = Cache::remember(
             "ticker.{$symbol->symbol}",
-            60,
+            $ttl,
             fn () => $symbol->ticker()
         );
 
