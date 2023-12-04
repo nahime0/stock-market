@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
             <div class="w-full text-center pb-4 text-lg">
                 <p class="dark:text-slate-300">This page will automatically fetch new data from the API each minute.</p>
-                <a href="/" class="underline hover:bg-red-900 dark:text-slate-300">Go back to homepage</a>
+                <a href="/" class="underline hover:bg-red-200 dark:hover:bg-red-900 dark:text-slate-300">Go back to homepage</a>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                 @foreach($symbols as $symbol)
