@@ -28,7 +28,11 @@ class ApiController extends BaseController
     {
         $ttl = config('stock_market.cache_ttl', 60);
 
-        assert(is_int($ttl) && $ttl > 0, 'Cache TTL must be a positive integer.');
+        assert(is_string($ttl) || is_int($ttl), 'Cache TTL must be a string or integer.');
+
+        $ttl = (int) $ttl;
+
+        assert($ttl > 0, 'Cache TTL must be a positive integer.');
 
         $ticker = Cache::remember(
             "ticker.{$symbol->symbol}",
