@@ -101,6 +101,16 @@ If you want to manually fetch the pricing you can run:
 php artisan app:fetch-pricing
 ```
 
+## Web interface
+
+The project has a very simple web interface, that you can access using the browser and 
+navigating to the the app url of your project.
+
+The web interface has a dashboard that shows the latest pricing for all the symbols in the database,
+with the price variation from the previous period.
+
+## REST API
+
 At ths point you can start using the REST API.
 For simplicity, in the repository there is a `Postman` collection that you can use to test the API.
 You can find it in the `var` folder.
@@ -109,7 +119,7 @@ Edit the variables of the collection to match your environment.
 
 There are three endpoints available:
 
-## GET /api/symbols
+### GET /api/symbols
 
 This endpoint will return the list of `Symbols` available in the database.
 The response will be a JSON array with shape:
@@ -122,7 +132,7 @@ The response will be a JSON array with shape:
 ]
 ```
 
-## GET /api/history/{symbol}
+### GET /api/history/{symbol}
 
 This endpoint will return the pricing history for the given `Symbol`.
 The response will be a JSON array with shape:
@@ -141,7 +151,7 @@ The response will be a JSON array with shape:
 }
 ```
 
-## GET /api/ticker/{symbol}
+### GET /api/ticker/{symbol}
 
 This endpoint will return the latest pricing for the given `Symbol`,
 and the price variation from the previous period.
