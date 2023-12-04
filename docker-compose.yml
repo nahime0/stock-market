@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  db:
+    image: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+    volumes:
+      - database:/var/lib/mysql
+  php:
+    container_name: php
+    build:
+      context: ./.docker
+    ports:
+      - '8085:80'
+    volumes:
+      - ./:/var/www/
+      - ./.docker/default.conf:/etc/apache2/sites-enabled/000-default.conf
+    depends_on:
+      - db
+
+volumes:
+    database:

@@ -81,7 +81,54 @@ php artisan serve
 
 # Running with Docker
 
-TBD
+The project can be run using `Docker`.
+
+In the repository, a simple `docker-compose.yml` is provided.
+It uses `mysql` for the database and a custom `php8.2-apache` image for the web server.
+
+Due to time contraints, the docker image is not optimized for production.
+
+A better solution would involve using nginx or caddy as a web server, and a separate container for php-fpm.
+
+If you want to use docker, use the provided .env file:
+
+```bash
+cp .env.docker .env
+```
+
+Then run:
+
+```bash
+docker-compose up --build
+```
+
+At this point you need to run all the commands in the previous section, but using docker:
+
+```bash
+docker-compose exec php composer install
+docker-compose exec php php artisan key:generate
+docker-compose exec php php artisan migrate
+docker-compose exec php php artisan app:fill-symbols
+```
+
+To fetch the pricing, you need to run the scheduler:
+
+```bash
+docker-compose exec php php artisan schedule:work
+```
+
+or fetch one time
+
+```bash
+docker-compose exec php php artisan app:fetch-pricing
+```
+
+Remember to adapt the `.env` file to match your environment.
+By default the api will point to the host machine on port `5000`, on which
+the mock server will be running (if started).
+
+The mapped port for the application is `8085`. So, once started, you can access the application
+using the browser and navigating to `http://localhost:8085`.
 
 # Usage
 
