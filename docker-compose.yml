@@ -12,7 +12,6 @@ services:
     volumes:
       - database:/var/lib/mysql
   php:
-    container_name: php
     build:
       context: ./.docker
     ports:
