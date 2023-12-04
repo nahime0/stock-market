@@ -28,7 +28,7 @@ class ApiController extends BaseController
     {
         $ticker = Cache::remember(
             "ticker.{$symbol->symbol}",
-            120,
+            60,
             fn () => $symbol->ticker()
         );
 
